@@ -9,7 +9,7 @@ class FirstScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const Icon(Icons.menu),
         backgroundColor: Colors.green,
-        title: const Text('My First App'),
+        title: const Text('My'),
         centerTitle: true,
         actions: const [
           Icon(Icons.notifications),
