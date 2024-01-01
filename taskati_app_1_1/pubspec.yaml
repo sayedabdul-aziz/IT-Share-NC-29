@@ -1,0 +1,26 @@
+name: taskati_app_1_1
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  gap: ^3.0.1
+  google_fonts: ^6.1.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  image_picker: ^1.0.5
+  lottie: ^2.7.0
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
