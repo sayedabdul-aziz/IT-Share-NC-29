@@ -7,10 +7,12 @@ class CustomButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.onPressed,
-      this.width = 250});
+      this.width = 250,
+      this.style});
 
   final String text;
   final double width;
+  final TextStyle? style;
   final Function()? onPressed;
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,9 @@ class CustomButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             text,
-            style: getBodyStyle(
-                color: AppColors.whiteColor, fontWeight: FontWeight.w500),
+            style: style ??
+                getBodyStyle(
+                    color: AppColors.whiteColor, fontWeight: FontWeight.w500),
           )),
     );
   }

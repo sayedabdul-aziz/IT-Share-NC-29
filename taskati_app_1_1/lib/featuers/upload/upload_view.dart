@@ -66,7 +66,6 @@ class _UploadViewState extends State<UploadView> {
                     uploadFromCamera();
                   },
                 ),
-                Image.asset('assets/kaaba.png'),
                 const Gap(10),
                 CustomButton(
                   text: 'Upload from Gallery',

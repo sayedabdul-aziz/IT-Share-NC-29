@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taskati_app_1_1/core/functions/routing.dart';
 import 'package:taskati_app_1_1/core/utils/text_styles.dart';
-import 'package:taskati_app_1_1/featuers/upload/upload_view.dart';
+import 'package:taskati_app_1_1/featuers/home/home_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -17,7 +17,7 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 4), () {
-      pushToWithReplacment(context, const UploadView());
+      pushToWithReplacment(context, const HomeView());
     });
   }
 
