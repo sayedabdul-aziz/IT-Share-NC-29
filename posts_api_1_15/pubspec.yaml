@@ -1,4 +1,4 @@
-name: insights_news_1_11
+name: posts_api_1_15
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -7,19 +7,9 @@ environment:
   sdk: '>=3.2.2 <4.0.0'
 
 dependencies:
-  buttons_tabbar: ^1.3.8
-  carousel_slider: ^4.2.1
-  dio: ^5.4.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.3
-  flutter_svg: ^2.0.9
-  gap: ^3.0.1
-  google_fonts: ^6.1.0
   http: ^1.1.2
-  image_picker: ^1.0.7
-  shared_preferences: ^2.2.2
-  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -28,5 +18,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/
