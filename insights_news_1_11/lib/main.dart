@@ -20,12 +20,13 @@ class MainApp extends StatelessWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: AppColors.scaffoldBg,
               appBarTheme: AppBarTheme(
+                  centerTitle: true,
                   backgroundColor: AppColors.scaffoldBg,
                   elevation: 0.0,
                   titleTextStyle: getTitleStyle(
                       color: AppColors.white,
                       fontSize: 16,
-                      fontWeight: FontWeight.w500)),
+                      fontWeight: FontWeight.w600)),
               inputDecorationTheme: InputDecorationTheme(
                 hintStyle: getSmallStyle(),
                 contentPadding:

@@ -16,6 +16,28 @@ class NewsCubit extends Cubit<NewsState> {
     }
   }
 
+  getNewsSlider() {
+    emit(NewsSliderLoadingState());
+    try {
+      ApiServices().getNewsByCategory('sports').then((value) {
+        emit(NewsSliderSuccessState(model: value!));
+      });
+    } catch (e) {
+      emit(NewsSliderErrorState(error: e.toString()));
+    }
+  }
+
+  getNewsBySearch(searchText) {
+    emit(NewsBySearchLoadingState());
+    try {
+      ApiServices().getNewsBySearch(searchText).then((value) {
+        emit(NewsBySearchSuccessState(model: value!));
+      });
+    } catch (e) {
+      emit(NewsBySearchErrorState(error: e.toString()));
+    }
+  }
+
   getNewsBySource(source) {
     emit(NewsByCategoryLoadingState());
     try {
