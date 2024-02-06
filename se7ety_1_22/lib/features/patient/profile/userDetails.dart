@@ -51,7 +51,7 @@ class _UserDetailsState extends State<UserDetails> {
         padding: const EdgeInsets.only(top: 8.0),
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('patients')
+              .collection('patient')
               .doc(user!.uid)
               .snapshots(),
           builder: (context, snapshot) {
@@ -168,10 +168,10 @@ class _UserDetailsState extends State<UserDetails> {
   }
 
   Future<void> updateData(String key, value) async {
-    FirebaseFirestore.instance.collection('patients').doc(user!.uid).set({
+    FirebaseFirestore.instance.collection('patient').doc(user!.uid).set({
       key: value,
     }, SetOptions(merge: true));
-    if (key.compareTo('name') == 0) {
+    if (key == 'name') {
       await user?.updateDisplayName(value);
     }
     Navigator.pop(context);

@@ -9,30 +9,19 @@ class AppointmentService {
     // تحديد مواعيد العمل لليوم المحدد
     int startHour = int.parse(start);
     int endHour = int.parse(end);
-    DateTime startDateTime = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      startHour,
-    );
-    DateTime endDateTime = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      endHour,
-    );
 
     // تحديد المواعيد المتاحة
     List<DateTime> availableAppointments = [];
     for (int i = startHour; i < endHour; i++) {
       DateTime candidateTime =
           DateTime(selectedDate.year, selectedDate.month, selectedDate.day, i);
-
+      // اذا كنا في نفس اليوم يباصي الساعات المتبقية من اليوم
       if (candidateTime.hour > DateTime.now().hour &&
           candidateTime.day == DateTime.now().day &&
           candidateTime.month == DateTime.now().month) {
         availableAppointments.add(candidateTime);
       }
+      // اذا لم تكن في نفس اليوم باصي كل حجوزات الدكتور خلال يومه
       if (candidateTime.day != DateTime.now().day) {
         availableAppointments.add(candidateTime);
       }

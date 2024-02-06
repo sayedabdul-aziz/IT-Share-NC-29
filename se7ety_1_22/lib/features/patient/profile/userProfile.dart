@@ -21,7 +21,7 @@ class PatientProfile extends StatefulWidget {
 
 class _PatientProfileState extends State<PatientProfile> {
   final FirebaseStorage _storage =
-      FirebaseStorage.instanceFor(bucket: 'gs://se7ety-2d0e4.appspot.com');
+      FirebaseStorage.instanceFor(bucket: 'gs://se7ety-2b286.appspot.com');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _imagePath;
   File? file;
@@ -32,7 +32,6 @@ class _PatientProfileState extends State<PatientProfile> {
 
   Future<void> _getUser() async {
     user = FirebaseAuth.instance.currentUser;
-    print(user?.displayName);
     UserID = user?.uid;
   }
 
@@ -48,7 +47,7 @@ class _PatientProfileState extends State<PatientProfile> {
   Future<void> _pickImage() async {
     _getUser();
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
       setState(() {
@@ -57,7 +56,7 @@ class _PatientProfileState extends State<PatientProfile> {
       });
     }
     profileUrl = await uploadImageToFireStore(file!, 'doc');
-    FirebaseFirestore.instance.collection('patients').doc(UserID).set({
+    FirebaseFirestore.instance.collection('patient').doc(UserID).set({
       'image': profileUrl,
     }, SetOptions(merge: true));
   }
@@ -97,8 +96,8 @@ class _PatientProfileState extends State<PatientProfile> {
       body: SafeArea(
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('patients')
-                .doc(user?.uid)
+                .collection('patient')
+                .doc(UserID)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -107,6 +106,7 @@ class _PatientProfileState extends State<PatientProfile> {
                 );
               }
               var userData = snapshot.data;
+              print(userData!['name']);
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
@@ -128,14 +128,13 @@ class _PatientProfileState extends State<PatientProfile> {
                                   child: CircleAvatar(
                                     backgroundColor: AppColors.white,
                                     radius: 60,
-                                    backgroundImage:
-                                        (userData?['image'] != null)
-                                            ? NetworkImage(userData?['image'])
-                                            : (_imagePath != null)
-                                                ? FileImage(File(_imagePath!))
-                                                    as ImageProvider
-                                                : const AssetImage(
-                                                    'assets/doc.png'),
+                                    backgroundImage: (userData['image'] != null)
+                                        ? NetworkImage(userData['image'])
+                                        : (_imagePath != null)
+                                            ? FileImage(File(_imagePath!))
+                                                as ImageProvider
+                                            : const AssetImage(
+                                                'assets/doc.png'),
                                   ),
                                 ),
                                 GestureDetector(
@@ -164,7 +163,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${userData!['name']}",
+                                    "${userData['name']}",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: getTitleStyle(),

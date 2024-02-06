@@ -12,17 +12,13 @@ class TileWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            height: 27,
-            width: 27,
-            color: AppColors.color1,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 16,
-            ),
+        CircleAvatar(
+          radius: 14,
+          backgroundColor: AppColors.color1,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 16,
           ),
         ),
         const SizedBox(

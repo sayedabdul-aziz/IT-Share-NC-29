@@ -28,6 +28,7 @@ class _TopRatedListState extends State<TopRatedList> {
             return ListView.builder(
               scrollDirection: Axis.vertical,
               physics: const ClampingScrollPhysics(),
+              // make listview scroll with single child scroll view
               shrinkWrap: true,
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {

@@ -44,14 +44,16 @@ class _BookingViewState extends State<BookingView> {
     user = _auth.currentUser;
   }
 
+  // جلب الساعات المتبقية من اليوم
   List<int> times = [];
   getAvilableTimes(selectedDate) async {
+    // to clear last times when clicking date dialog
     times.clear();
     AppointmentService()
         .getAvailableAppointments(
             selectedDate, widget.doctor.startHour, widget.doctor.endHour)
-        .then((value) {
-      for (var i in value) {
+        .then((avilableTimes) {
+      for (var i in avilableTimes) {
         times.add(i.hour);
       }
     });
@@ -79,6 +81,7 @@ class _BookingViewState extends State<BookingView> {
         if (date != null) {
           setState(
             () {
+              // intl to format datetime
               _dateController.text = DateFormat('dd-MM-yyyy').format(date);
               dateUTC = DateFormat('yyyy-MM-dd').format(date);
               getAvilableTimes(date);
@@ -275,6 +278,8 @@ class _BookingViewState extends State<BookingView> {
                         ],
                       ),
                     ),
+
+                    // available times chips
                     Wrap(spacing: 8.0, children: [
                       for (int i = 0; i < times.length; i++)
                         ChoiceChip(
@@ -292,6 +297,7 @@ class _BookingViewState extends State<BookingView> {
                           onSelected: (selected) {
                             setState(() {
                               isSelected = i;
+                              // to add 0 before hours < 10 (9:00  ===> 09:00)
                               date_Time =
                                   '${(times[i] < 10) ? '0' : ''}${times[i].toString()}:00';
                             });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:se7ety_1_22/core/utils/colors.dart';
 import 'package:se7ety_1_22/core/utils/styles.dart';
@@ -90,9 +91,7 @@ class ItemCardWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Flexible(
-                    child: Image.asset('assets/doc.png'),
-                  ),
+                  Flexible(child: SvgPicture.asset('assets/doctor-card.svg')),
                   const Gap(10),
                   Flexible(
                     child: Text(title,

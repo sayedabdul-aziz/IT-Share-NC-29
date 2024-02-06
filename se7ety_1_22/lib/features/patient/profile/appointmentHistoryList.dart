@@ -137,10 +137,7 @@ class _AppointmentHistoryListState extends State<AppointmentHistoryList> {
                   itemCount: snapshot.data?.size,
                   itemBuilder: (context, index) {
                     DocumentSnapshot document = snapshot.data!.docs[index];
-                    print(_compareDate(document['date'].toDate().toString()));
-                    // if (_checkDiff(document['date'].toDate())) {
-                    //   deleteAppointment(document.id);
-                    // }
+
                     return Column(
                       children: [
                         const SizedBox(

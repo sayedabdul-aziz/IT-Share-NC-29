@@ -41,66 +41,62 @@ class _MainPageState extends State<PatientMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _pages[_selectedIndex],
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.2),
             ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.2),
-              ),
-            ],
-          ),
-          child: GNav(
-            curve: Curves.easeOutExpo,
-            rippleColor: Colors.grey,
-            hoverColor: Colors.grey,
-            haptic: true,
-            tabBorderRadius: 20,
-            gap: 5,
-            activeColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            duration: const Duration(milliseconds: 400),
-            tabBackgroundColor: AppColors.color1,
-            textStyle: getbodyStyle(color: AppColors.white),
-            tabs: const [
-              GButton(
-                iconSize: 28,
-                icon: Icons.home,
-                text: 'الرئيسية',
-              ),
-              GButton(
-                icon: Icons.search,
-                text: 'البحث',
-              ),
-              GButton(
-                iconSize: 28,
-                icon: Icons.calendar_month_rounded,
-                text: 'المواعيد',
-              ),
-              GButton(
-                iconSize: 29,
-                icon: Icons.person,
-                text: 'الحساب',
-              ),
-            ],
-            selectedIndex: _selectedIndex,
-            onTabChange: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-            },
-          ),
+          ],
+        ),
+        child: GNav(
+          curve: Curves.easeOutExpo,
+          rippleColor: Colors.grey,
+          hoverColor: Colors.grey,
+          haptic: true,
+          tabBorderRadius: 20,
+          gap: 5,
+          activeColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          duration: const Duration(milliseconds: 400),
+          tabBackgroundColor: AppColors.color1,
+          textStyle: getbodyStyle(color: AppColors.white),
+          tabs: const [
+            GButton(
+              iconSize: 28,
+              icon: Icons.home,
+              text: 'الرئيسية',
+            ),
+            GButton(
+              icon: Icons.search,
+              text: 'البحث',
+            ),
+            GButton(
+              iconSize: 28,
+              icon: Icons.calendar_month_rounded,
+              text: 'المواعيد',
+            ),
+            GButton(
+              iconSize: 29,
+              icon: Icons.person,
+              text: 'الحساب',
+            ),
+          ],
+          selectedIndex: _selectedIndex,
+          onTabChange: (value) {
+            setState(() {
+              _selectedIndex = value;
+            });
+          },
         ),
       ),
     );

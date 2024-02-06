@@ -14,6 +14,7 @@ class AuthCubit extends Cubit<AuthStates> {
           .signInWithEmailAndPassword(email: email, password: password);
       emit(LoginSuccessState());
     } on FirebaseAuthException catch (e) {
+      print('-------------');
       if (e.code == 'user-not-found') {
         emit(LoginErrorState(error: 'الحساب غير موجود'));
       } else if (e.code == 'wrong-password') {

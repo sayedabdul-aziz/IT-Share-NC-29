@@ -47,22 +47,6 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
   }
 
   showAlertDialog(BuildContext context, String doctorID) {
-    Widget cancelButton = TextButton(
-      child: const Text("لا"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const Text("نعم"),
-      onPressed: () {
-        deleteAppointment(
-          _documentID!,
-        );
-        Navigator.of(context).pop();
-      },
-    );
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -70,8 +54,24 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
           title: const Text("حذف الحجز"),
           content: const Text("هل متاكد من حذف هذا الحجز ؟"),
           actions: [
-            cancelButton,
-            continueButton,
+            // nooooooooooo
+            TextButton(
+              child: const Text("لا"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            /// deleteeeeeeeeeee
+            TextButton(
+              child: const Text("نعم"),
+              onPressed: () {
+                deleteAppointment(
+                  _documentID!,
+                );
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },
@@ -107,6 +107,8 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder(
+        // to get my appointments (using my email)
+        // to use where and orderby, you must add indexing from link in console
         stream: FirebaseFirestore.instance
             .collection('appointments')
             .doc('appointments')
@@ -132,146 +134,129 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                         document.id,
                       );
                     }
-                    return Column(
-                      children: [
-                        const SizedBox(
-                          height: 15,
+                    return Container(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.scaffoldBG,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(-3, 0),
+                            blurRadius: 15,
+                            color: Colors.grey.withOpacity(.1),
+                          )
+                        ],
+                      ),
+                      child: ExpansionTile(
+                        childrenPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.scaffoldBG,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(-3, 0),
-                                blurRadius: 15,
-                                color: Colors.grey.withOpacity(.1),
-                              )
-                            ],
-                          ),
-                          child: ExpansionTile(
-                            childrenPadding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                            ),
-                            expandedCrossAxisAlignment: CrossAxisAlignment.end,
-                            backgroundColor: AppColors.scaffoldBG,
-                            collapsedBackgroundColor: AppColors.scaffoldBG,
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Text(
-                                    'د. ${document['doctor']}',
-                                    style: getTitleStyle(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 5, left: 5),
-                              child: Column(
+                        expandedCrossAxisAlignment: CrossAxisAlignment.end,
+                        backgroundColor: AppColors.scaffoldBG,
+                        collapsedBackgroundColor: AppColors.scaffoldBG,
+                        title: Text(
+                          'د. ${document['doctor']}',
+                          style: getTitleStyle(),
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 5),
+                          child: Column(
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.calendar_month_rounded,
-                                          color: AppColors.color1, size: 16),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        _dateFormatter(document['date']
-                                            .toDate()
-                                            .toString()),
-                                        style: getbodyStyle(),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        _compareDate(document['date']
-                                                .toDate()
-                                                .toString())
-                                            ? "اليوم"
-                                            : "",
-                                        style: getbodyStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green),
-                                      ),
-                                    ],
+                                  Icon(Icons.calendar_month_rounded,
+                                      color: AppColors.color1, size: 16),
+                                  const SizedBox(
+                                    width: 10,
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.watch_later_outlined,
-                                          color: AppColors.color1, size: 16),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        _timeFormatter(
-                                          document['date'].toDate().toString(),
-                                        ),
-                                        style: getbodyStyle(),
-                                      ),
-                                    ],
+                                  Text(
+                                    _dateFormatter(
+                                        document['date'].toDate().toString()),
+                                    style: getbodyStyle(),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Text(
+                                    _compareDate(document['date']
+                                            .toDate()
+                                            .toString())
+                                        ? "اليوم"
+                                        : "",
+                                    style: getbodyStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green),
                                   ),
                                 ],
                               ),
-                            ),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 5, right: 10, left: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "اسم المريض: " + document['name'],
+                              Row(
+                                children: [
+                                  Icon(Icons.watch_later_outlined,
+                                      color: AppColors.color1, size: 16),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    _timeFormatter(
+                                      document['date'].toDate().toString(),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.location_on_rounded,
-                                            color: AppColors.color1, size: 16),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          document['location'],
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              foregroundColor: AppColors.white,
-                                              backgroundColor:
-                                                  AppColors.redColor),
-                                          onPressed: () {
-                                            _documentID = document.id;
-                                            showAlertDialog(
-                                                context, document['doctorID']);
-                                          },
-                                          child: const Text('حذف الحجز')),
-                                    ),
-                                  ],
-                                ),
+                                    style: getbodyStyle(),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-                      ],
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 5, right: 10, left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "اسم المريض: " + document['name'],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.location_on_rounded,
+                                        color: AppColors.color1, size: 16),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      document['location'],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          foregroundColor: AppColors.white,
+                                          backgroundColor: AppColors.redColor),
+                                      onPressed: () {
+                                        _documentID = document.id;
+                                        showAlertDialog(
+                                            context, document['doctorID']);
+                                      },
+                                      child: const Text('حذف الحجز')),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 );
