@@ -8,6 +8,7 @@ import 'package:se7ety_1_22/core/widgets/custom_dialogs.dart';
 import 'package:se7ety_1_22/features/auth/presentaion/view-model/auth_cubit.dart';
 import 'package:se7ety_1_22/features/auth/presentaion/view-model/auth_states.dart';
 import 'package:se7ety_1_22/features/auth/presentaion/views/register_view.dart';
+import 'package:se7ety_1_22/features/doctor/home/nav_bar.dart';
 import 'package:se7ety_1_22/features/patient/home/presentation/nav_bar.dart';
 
 class LoginView extends StatefulWidget {
@@ -36,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
         // navigation & snackBar & dialog
         if (state is LoginSuccessState) {
           if (widget.index == 0) {
-            pushAndRemoveUntil(context, const PatientMainPage());
+            pushAndRemoveUntil(context, const DoctorMainPage());
           } else {
             pushAndRemoveUntil(context, const PatientMainPage());
           }

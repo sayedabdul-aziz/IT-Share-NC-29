@@ -7,18 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:se7ety_1_22/core/utils/colors.dart';
 import 'package:se7ety_1_22/core/utils/styles.dart';
-import 'package:se7ety_1_22/core/widgets/custom_button.dart';
 import 'package:se7ety_1_22/core/widgets/tile_widget.dart';
 import 'package:se7ety_1_22/features/patient/profile/appointmentHistoryList.dart';
+import 'package:se7ety_1_22/features/patient/profile/userSettings.dart';
+import 'package:se7ety_1_22/features/patient/search/presentaion/view/widgets/contact_icon.dart';
 
-class PatientProfile extends StatefulWidget {
-  const PatientProfile({super.key});
+class DoctorProfileView extends StatefulWidget {
+  const DoctorProfileView({super.key});
 
   @override
-  _PatientProfileState createState() => _PatientProfileState();
+  _DoctorProfileState createState() => _DoctorProfileState();
 }
 
-class _PatientProfileState extends State<PatientProfile> {
+class _DoctorProfileState extends State<DoctorProfileView> {
   final FirebaseStorage _storage =
       FirebaseStorage.instanceFor(bucket: 'gs://se7ety-2b286.appspot.com');
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -85,11 +86,9 @@ class _PatientProfileState extends State<PatientProfile> {
               Icons.settings,
               color: AppColors.white,
             ),
-            onPressed: () async {
-              await FirebaseAuth.instance
-                  .sendPasswordResetEmail(email: 'sayedabdulaziz10@gmail.com');
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (contex) => const UserSettings()));
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (contex) => const UserSettings()));
             },
           ),
         ],
@@ -97,7 +96,7 @@ class _PatientProfileState extends State<PatientProfile> {
       body: SafeArea(
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('patient')
+                .collection('doctor')
                 .doc(UserID)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -131,26 +130,8 @@ class _PatientProfileState extends State<PatientProfile> {
                                     radius: 60,
                                     backgroundImage: (userData['image'] != null)
                                         ? NetworkImage(userData['image'])
-                                        : (_imagePath != null)
-                                            ? FileImage(File(_imagePath!))
-                                                as ImageProvider
-                                            : const AssetImage(
-                                                'assets/doc.png'),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await _pickImage();
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 15,
-                                    backgroundColor: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                    child: const Icon(
-                                      Icons.camera_alt_rounded,
-                                      size: 20,
-                                      // color: AppColors.color1,
-                                    ),
+                                            as ImageProvider
+                                        : const AssetImage('assets/doc.png'),
                                   ),
                                 ),
                               ],
@@ -164,28 +145,54 @@ class _PatientProfileState extends State<PatientProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${userData['name']}",
+                                    "د. ${userData['name']}",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: getTitleStyle(),
                                   ),
+                                  Text(
+                                    userData['specialization'],
+                                    style: getbodyStyle(),
+                                  ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  (userData['city'] == null)
-                                      ? const CustomButton(
-                                          text: 'تعديل الحساب',
-                                          height: 40,
-                                        )
-                                      : Text(
-                                          userData['city'],
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: getbodyStyle(),
-                                        ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        userData['rating'].toString(),
+                                        style: getbodyStyle(),
+                                      ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      const Icon(
+                                        Icons.star_rounded,
+                                        size: 20,
+                                        color: Colors.orange,
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 15,
                                   ),
+                                  Row(
+                                    children: [
+                                      IconTile(
+                                        onTap: () {},
+                                        backColor: AppColors.scaffoldBG,
+                                        imgAssetPath: Icons.phone,
+                                        num: '1',
+                                      ),
+                                      if (userData['phone2'] != null)
+                                        IconTile(
+                                          onTap: () {},
+                                          backColor: AppColors.scaffoldBG,
+                                          imgAssetPath: Icons.phone,
+                                          num: '2',
+                                        ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -195,33 +202,22 @@ class _PatientProfileState extends State<PatientProfile> {
                           height: 25,
                         ),
                         Text(
-                          "نبذه تعريفيه",
+                          "نبذه تعريفية",
                           style: getbodyStyle(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          userData['bio'] ?? 'لم تضاف',
+                          userData['bio'],
                           style: getsmallStyle(),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
-                        const Divider(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "معلومات التواصل",
-                          style: getbodyStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
                         Container(
                           padding: const EdgeInsets.all(15),
-                          width: MediaQuery.of(context).size.width,
+                          width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.scaffoldBG,
@@ -230,14 +226,52 @@ class _PatientProfileState extends State<PatientProfile> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TileWidget(
-                                  text: userData['email'] ?? 'لم تضاف',
-                                  icon: Icons.email),
+                                  text:
+                                      '${userData['openHour']} - ${userData['closeHour']}',
+                                  icon: Icons.watch_later_outlined),
                               const SizedBox(
                                 height: 15,
                               ),
                               TileWidget(
-                                  text: userData['phone'] ?? 'لم تضاف',
-                                  icon: Icons.call),
+                                  text: userData['address'],
+                                  icon: Icons.location_on_rounded),
+                            ],
+                          ),
+                        ),
+                        const Divider(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "معلومات الاتصال",
+                          style: getbodyStyle(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(15),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.scaffoldBG,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TileWidget(
+                                  text: userData['email'], icon: Icons.email),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TileWidget(
+                                  text: userData['phone1'], icon: Icons.call),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              if (userData['phone2'] != null)
+                                TileWidget(
+                                    text: userData['phone2'], icon: Icons.call),
                             ],
                           ),
                         ),

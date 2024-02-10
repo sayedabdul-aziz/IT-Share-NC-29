@@ -35,7 +35,7 @@ class _BookingViewState extends State<BookingView> {
   String? dateUTC;
   String? date_Time;
 
-  int isSelected = -1;
+  Set<int> isSelected = {};
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
@@ -288,15 +288,17 @@ class _BookingViewState extends State<BookingView> {
                           label: Text(
                             '${times[i].toString()}:00',
                             style: TextStyle(
-                              color: i == isSelected
+                              color: isSelected.contains(i)
                                   ? AppColors.white
                                   : AppColors.black,
                             ),
                           ),
-                          selected: i == isSelected,
+                          selected: isSelected.contains(i),
                           onSelected: (selected) {
                             setState(() {
-                              isSelected = i;
+                              isSelected.contains(i)
+                                  ? isSelected.remove(i)
+                                  : isSelected.add(i);
                               // to add 0 before hours < 10 (9:00  ===> 09:00)
                               date_Time =
                                   '${(times[i] < 10) ? '0' : ''}${times[i].toString()}:00';

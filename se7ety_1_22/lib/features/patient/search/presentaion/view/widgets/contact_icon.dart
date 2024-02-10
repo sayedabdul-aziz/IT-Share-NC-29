@@ -4,13 +4,13 @@ import 'package:se7ety_1_22/core/utils/colors.dart';
 class IconTile extends StatelessWidget {
   final IconData imgAssetPath;
   final Color backColor;
-  void Function()? onTap;
+  final Function() onTap;
   final String num;
-  IconTile(
+  const IconTile(
       {super.key,
       required this.imgAssetPath,
       required this.backColor,
-      this.onTap,
+      required this.onTap,
       required this.num});
 
   @override

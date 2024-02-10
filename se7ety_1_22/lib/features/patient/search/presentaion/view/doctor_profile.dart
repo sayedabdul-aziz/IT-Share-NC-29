@@ -223,6 +223,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
                 ),
               ],
             )),
+         
+         
           );
         },
       ),

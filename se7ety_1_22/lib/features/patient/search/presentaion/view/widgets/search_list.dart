@@ -18,7 +18,7 @@ class _SearchListState extends State<SearchList> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection('doctors')
+          .collection('doctor')
           .orderBy('name')
           .startAt([widget.searchKey]).endAt(
               ['${widget.searchKey}\uf8ff']).snapshots(),
@@ -49,9 +49,15 @@ class _SearchListState extends State<SearchList> {
               )
             : Scrollbar(
                 child: ListView.builder(
-                  itemCount: snapshot.data?.size,
+                  itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doctor = snapshot.data!.docs[index];
+                    if (doctor['name'] == null ||
+                        doctor['image'] == null ||
+                        doctor['specialization'] == null ||
+                        doctor['rating'] == null) {
+                      return const SizedBox();
+                    }
                     return DoctorCard(
                         name: doctor['name'],
                         image: doctor['image'],

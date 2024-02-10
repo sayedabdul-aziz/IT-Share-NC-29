@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:se7ety_1_22/core/utils/colors.dart';
 import 'package:se7ety_1_22/core/utils/styles.dart';
@@ -78,6 +79,41 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
     );
   }
 
+  showCompleteDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text("تم الكشف"),
+          content: const Text("هل متاكد من اتمام هذا الكشف ؟"),
+          actions: [
+            // nooooooooooo
+            TextButton(
+              child: const Text("لا"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            /// deleteeeeeeeeeee
+            TextButton(
+              child: const Text("نعم"),
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('appointments')
+                    .doc('appointments')
+                    .collection('pending')
+                    .doc(docId)
+                    .set({'isComplete': true}, SetOptions(merge: true));
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   _checkDiff(DateTime date) {
     var diff = DateTime.now().difference(date).inHours;
     if (diff > 2) {
@@ -113,7 +149,7 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
             .collection('appointments')
             .doc('appointments')
             .collection('pending')
-            .where('patientID', isEqualTo: '${user!.email}')
+            .where('doctorID', isEqualTo: '${user!.email}')
             .orderBy('date', descending: false)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -141,14 +177,8 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                         right: 10,
                       ),
                       decoration: BoxDecoration(
+                        // color: AppColors.scaffoldBG,
                         borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(-3, 0),
-                            blurRadius: 15,
-                            color: Colors.grey.withOpacity(.1),
-                          )
-                        ],
                       ),
                       child: ExpansionTile(
                         childrenPadding: const EdgeInsets.symmetric(
@@ -160,7 +190,7 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                             : AppColors.scaffoldBG,
                         collapsedBackgroundColor: AppColors.scaffoldBG,
                         title: Text(
-                          'د. ${document['doctor']}',
+                          "اسم المريض: " + document['name'],
                           style: getTitleStyle(),
                         ),
                         subtitle: Padding(
@@ -220,12 +250,6 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "اسم المريض: " + document['name'],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
                                 Row(
                                   children: [
                                     Icon(Icons.location_on_rounded,
@@ -241,18 +265,60 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          foregroundColor: AppColors.white,
-                                          backgroundColor: AppColors.redColor),
-                                      onPressed: () {
-                                        _documentID = document.id;
-                                        showAlertDialog(
-                                            context, document['doctorID']);
-                                      },
-                                      child: const Text('حذف الحجز')),
+                                Row(
+                                  children: [
+                                    Icon(Icons.call,
+                                        color: AppColors.color1, size: 16),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      document['phone'],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      document['description'],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              foregroundColor: AppColors.white,
+                                              backgroundColor: Colors.green),
+                                          onPressed: () {
+                                            _documentID = document.id;
+                                            showCompleteDialog(
+                                                context, document.id);
+                                          },
+                                          child: const Text('تم الكشف')),
+                                    ),
+                                    const Gap(20),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              foregroundColor: AppColors.white,
+                                              backgroundColor:
+                                                  AppColors.redColor),
+                                          onPressed: () {
+                                            _documentID = document.id;
+                                            showAlertDialog(
+                                                context, document['doctorID']);
+                                          },
+                                          child: const Text('حذف الحجز')),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
